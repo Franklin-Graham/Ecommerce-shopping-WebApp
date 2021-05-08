@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        Welcome to Musicals Store where you can buy variety instruments...
+    {% endif %}
+{% endblock %}
+{% block title %}
+
+    {% if category %}
+        {{category.name}} - MUSICAL STORE
+    {% else %}
+        see our New collections -- MUSICAL STORE
+    {% endif %}
+{% endblock %}
+{% block body %}
+
+    {% if category %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'shop:AllProductCat' %}">Our Product Collections</a></p>
+        </div>
+        </div>
+
+    </div>
+    {% endif %}
+    <div class="mx-auto">
+        {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">{{category.name}}</h1>
+        <p style="text-align:justify;">{{category.description}}</p>
+    </div>
+        {% else %}
+            <div>
+                <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our Products" width="1330px">
+            </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">Our Product Collections</h1>
+        <p style="text-align:justify;">It's 1988. The CD has arrived. Sales of the shiny new disks are soaring on high streets in cities across the country. Meanwhile, down a dead-end street, Frank's music shop stands small and brightly lit, jam-packed with records of every kind. It attracts the lonely, the sleepless, the adrift. There is room for everyone. Frank has a gift for finding his customers the music they need. Into this shop arrives Ilse Brauchmann - practical, brave, well-heeled. Frank falls for this curious woman who always dresses in green. But Ilse's reasons for visiting the shop are not what they seem. Frank's passion for Ilse seems as misguided as his determination to save vinyl. How can a man so in tune with other people's needs be so incapable of helping himself? And what will it take to show he loves her? The Music Shop is a story about good, ordinary people who take on forces too big for them. It's about falling in love and how hard it can be. And it's about music - how it can bring us together when we are divided and save us when all seems lost</p>
+    </div>
+        {% endif %}
+
+    <div class="container">
+        <div class="row mx_auto">
+             {% for product in products.object_list %}
+        <div class="my-bottom-margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.g_url}}"><img class="card-img-top my_image" src="{{product.image.url}}"  alt="{{product.name}}"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <h4>{{product.price}}</h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        <!-- paginator -->
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm" {% if products.number == pg %} active {% endif %}}>{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
